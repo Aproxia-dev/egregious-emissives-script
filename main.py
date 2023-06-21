@@ -13,17 +13,20 @@ for kw in keywords:
 
 for file in files:
     if not any(kw in file for kw in bad_keywords):
-        overlay = Image.open(file).convert('LA')
+        img = Image.open(file)
+
+        blank = Image.new('RGBA', img.size, '#ff000000')
+        emissive = Image.new('RGBA', img.size, '#ff0000fe')
+
+        overlay = Image.composite(img.convert("LA"), blank, img.convert("L"))
+
         folders = file.split("/")
         folders[1] = "dst"
         folders[-1] = folders[-1].replace(".png", "_s.png")
         output = "/".join(folders)
-        folder.pop()
+        folders.pop()
 
-        ne = Image.new('RGBA', overlay.size, '#00000000')
-        em = Image.new('RGBA', overlay.size, '#ff0000fe')
-
-        outputImg = Image.composite(em, ne, overlay)
+        outputImg = Image.composite(emissive, blank, overlay)
 
         makedirs("/".join(folders), exist_ok=True)
         outputImg.save(output, 'png')
