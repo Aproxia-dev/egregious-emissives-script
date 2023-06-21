@@ -15,8 +15,8 @@ for file in files:
     if not any(kw in file for kw in bad_keywords):
         img = Image.open(file)
 
-        blank = Image.new('RGBA', img.size, '#ff000000')
-        emissive = Image.new('RGBA', img.size, '#ff0000fe')
+        blank = Image.new('RGBA', img.size, '#00000000')
+        emissive = Image.new('RGBA', img.size, '#000000fe')
 
         overlay = Image.composite(img.convert("LA"), blank, img.convert("L"))
 
